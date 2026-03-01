@@ -5,22 +5,26 @@
 ```
 lib/
 ├── main.dart
+├── app/
+│   └── app.dart
 ├── core/
 │   └── app_errors.dart
-├── data/
-│   ├── todo_local_datasource.dart
-│   ├── todo_remote_datasource.dart
-│   └── todo_repository_impl.dart
-├── model/
-│   ├── todo.dart
-│   ├── todo_model.dart
-│   └── todo_repository.dart
-├── view/
-│   ├── add_todo_dialog.dart
-│   ├── app_root.dart
-│   └── todos_page.dart
-└── viewmodel/
-    └── todo_viewmodel.dart
+└── features/
+    └── todos/
+        ├── data/
+        │   ├── datasource/
+        │   │   ├── todo_remote_datasource.dart
+        │   │   └── todo_local_datasource.dart
+        │   ├── repository/
+        │   │   └── todo_repository_impl.dart
+        │   └── todo_model.dart
+        ├── domain/
+        │   ├── todo.dart
+        │   └── todo_repository.dart
+        └── presentation/
+            ├── todo_viewmodel.dart
+            ├── todos_page.dart
+            └── add_todo_dialog.dart
 ```
 
 ## Fluxo de dependências
@@ -29,10 +33,10 @@ UI -> ViewModel -> Repository -> (RemoteDataSource, LocalDataSource)
 ## Decisões
 
 - Onde ficou a validação?
-Camada ViewModel. No TodoViewModel (viewmodel/todo_viewmodel.dart). O metodo addTodo() verifica se o titulo esta vazio antes de chamar o Repository. A View nao faz validacao de regra de negocio.
+Camada ViewModel. No TodoViewModel (features/todos/presentation/todo_viewmodel.dart). O metodo addTodo() verifica se o titulo esta vazio antes de chamar o Repository. A View nao faz validacao de regra de negocio.
 
 - Onde ficou o parsing JSON?
-Camada Model. No TodoModel (model/todo_model.dart), com fromJson() e toJson(). O TodoRemoteDataSource (camada Data) recebe o JSON bruto e delega a conversao para TodoModel.fromJson(). O TodoRepositoryImpl (camada Data) converte TodoModel para Todo puro (dominio sem JSON).
+Camada Data. No TodoModel (features/todos/data/todo_model.dart), com fromJson() e toJson(). O TodoRemoteDataSource (features/todos/data/datasource/) recebe o JSON bruto e delega a conversao para TodoModel.fromJson(). O TodoRepositoryImpl (features/todos/data/repository/) converte TodoModel para Todo puro (dominio sem JSON).
 
 - Como você tratou erros?
-Camadas Data e ViewModel. Os DataSources (camada Data) lancam Exception quando o HTTP retorna status fora de 200-299. O TodoViewModel (camada ViewModel) faz try/catch em todos os metodos (loadTodos, addTodo, toggleCompleted) e expoe o erro via errorMessage (String reativo). A View (camada View) le errorMessage e exibe UI de erro com botao "Tentar novamente". No toggleCompleted, o ViewModel aplica optimistic update (atualiza a UI imediatamente) e faz rollback se a chamada falhar.
+Camadas Data e Presentation. Os DataSources (features/todos/data/datasource/) lancam Exception quando o HTTP retorna status fora de 200-299. O TodoViewModel (features/todos/presentation/todo_viewmodel.dart) faz try/catch em todos os metodos (loadTodos, addTodo, toggleCompleted) e expoe o erro via errorMessage (String reativo). A View (features/todos/presentation/) le errorMessage e exibe UI de erro com botao "Tentar novamente". No toggleCompleted, o ViewModel aplica optimistic update (atualiza a UI imediatamente) e faz rollback se a chamada falhar.

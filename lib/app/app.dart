@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'todos_page.dart';
+import '../features/todos/presentation/todos_page.dart';
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});

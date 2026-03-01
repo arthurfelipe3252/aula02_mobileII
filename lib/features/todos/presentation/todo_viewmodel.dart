@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-import '../data/todo_repository_impl.dart';
-import '../model/todo.dart';
+import '../data/repository/todo_repository_impl.dart';
+import '../domain/todo.dart';
 
 class TodoViewModel extends ChangeNotifier {
   final TodoRepositoryImpl _repo = TodoRepositoryImpl(); // bagunça: impl direto aqui

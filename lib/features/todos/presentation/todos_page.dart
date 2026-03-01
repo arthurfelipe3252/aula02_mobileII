@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'add_todo_dialog.dart';
-import '../viewmodel/todo_viewmodel.dart';
+import 'todo_viewmodel.dart';
 
 class TodosPage extends StatefulWidget {
   const TodosPage({super.key});

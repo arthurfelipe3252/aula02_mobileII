@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'view/app_root.dart';
-import 'viewmodel/todo_viewmodel.dart';
+import 'app/app.dart';
+import 'features/todos/presentation/todo_viewmodel.dart';
 
 void main() {
   runApp(
